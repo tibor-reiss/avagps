@@ -1,6 +1,7 @@
 import datetime
 import json
 import logging
+import os
 import requests
 import threading
 import time
@@ -35,14 +36,19 @@ def get_vip_coord(coord):
     return resp
 
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_pyfile('config.py')
+def set_app_logger(app):
+    pid = os.getpid()
     handler = logging.FileHandler('avagps.log')
-    formatter = logging.Formatter('%(asctime)s - %(message)s')
+    formatter = logging.Formatter(f'%(levelname)s {pid} - %(message)s')
     handler.setFormatter(formatter)
     app.logger.addHandler(handler)
     app.logger.setLevel(logging.INFO)
+
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_pyfile('config.py')
+    set_app_logger(app)
 
     @app.route('/ping')
     def ping():
