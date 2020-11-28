@@ -1,0 +1,5 @@
+homework_backend/
+**/__pycache__/
+*.egg-info/
+.vscode/
+avagps.log
