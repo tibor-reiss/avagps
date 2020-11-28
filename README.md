@@ -7,6 +7,7 @@ This is a simple flask app with 3 endpoints:
   * after more than 5 sec: TIMEOUT
   * if there is a db error: ERROR
   * in normal operation a json, e.g. {"gpsCoords":{"lat":77.77449,"long":106.75767},"source":"vip-db"}
+A log file is generated in the current directory. The log will contain a periodic heartbeat for each worker and timeout/error messages.
 
 ## Installation
 ```bash
