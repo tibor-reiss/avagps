@@ -21,6 +21,7 @@ setuptools.setup(
     install_requires=[
         'flask',
         'pytest-mock',
+        'python-dotenv',
         'requests',
         'timeout-decorator',
     ],

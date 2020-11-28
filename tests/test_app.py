@@ -1,11 +1,15 @@
-from flask import Flask
 import pytest
 
 from src.app import create_app
 
 
+@pytest.fixture
+def mock_heartbeat(mocker):
+    mocker.patch('src.config.HEARTBEAT')
+
+
 @pytest.fixture()
-def app():
+def app(mock_heartbeat):
     _app = create_app()
     yield _app
 

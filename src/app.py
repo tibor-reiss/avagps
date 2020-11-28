@@ -37,6 +37,7 @@ def get_vip_coord(coord):
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_pyfile('config.py')
     handler = logging.FileHandler('avagps.log')
     formatter = logging.Formatter('%(asctime)s - %(message)s')
     handler.setFormatter(formatter)
@@ -76,17 +77,14 @@ def create_app():
             app.logger.error(f'Timeout when querying {coord}!')
             return 'TIMEOUT'
 
+    if app.config.get('HEARTBEAT'):
+        t2 = threading.Thread(target=heartbeat_task, args=(app,))
+        t2.start()
+
     return app
-
-
-def flask_thread(app):
-    app.logger.info('Starting flask app...')
-    app.run()
 
 
 if __name__ == '__main__':
     app = create_app()
-    t1 = threading.Thread(target=flask_thread, args=(app,))
-    t1.start()
-    t2 = threading.Thread(target=heartbeat_task, args=(app,))
-    t2.start()
+    app.logger.info('Starting flask app...')
+    app.run()
