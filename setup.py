@@ -20,6 +20,7 @@ setuptools.setup(
     ],
     install_requires=[
         'flask',
+        'gunicorn',
         'pytest-mock',
         'python-dotenv',
         'requests',

@@ -12,10 +12,13 @@ This is a simple flask app with 3 endpoints:
 ```bash
 $ python3 -m venv <your_virtual_environment>
 $ source <your_virual_environment>/bin/activate
-$ python3 -m pip install https://github.com/tibor-reiss/avagps/raw/master/dist/avagps-1.0.0-py3-none-any.whl
+$ git clone git@github.com:tibor-reiss/avagps.git .
+$ python3 -m pip install -e .
 ```
 
 ## Start the app
+Logging location: avagps.log
+
 Development
 ```bash
 flask run

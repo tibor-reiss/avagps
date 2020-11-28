@@ -3,4 +3,3 @@ homework_backend/
 *.egg-info/
 .vscode/
 avagps.log
-build/
