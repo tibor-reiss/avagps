@@ -53,7 +53,7 @@ def create_app():
     @app.route('/ping')
     def ping():
         return heartbeat()
-    
+
     @app.route('/v1/now')
     def time_now():
         try:
