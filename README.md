@@ -45,4 +45,7 @@ From command line:
 ```
 
 ## Testing
+```bash
 pytest
+pytest --cov=src
+```

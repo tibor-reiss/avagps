@@ -6,10 +6,14 @@ import requests
 import threading
 import time
 import timeout_decorator
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 
 
-TIMEOUT = 5
+TIMEOUT = 4
+
+
+class MissingJsonFields(Exception):
+    pass
 
 
 def heartbeat():
@@ -68,20 +72,31 @@ def create_app():
         try:
             resp = get_vip_coord(coord)
             if resp.status_code == 200:
-                jdata = json.loads(resp.text)
-                jdata.pop('type')
-                jdata['gpsCoords'] = {
-                    'lat': jdata.pop('latitude'),
-                    'long': jdata.pop('longitude'),
-                }
-                jdata['source'] = 'vip-db'
-                return jdata
+                try:
+                    json_received = json.loads(resp.text)
+                    if 'latitude' not in json_received or 'longitude' not in json_received:
+                        raise MissingJsonFields()
+                    json_vip = {
+                        'source': 'vip-db',
+                        'gpsCoords': {
+                            'lat': json_received['latitude'],
+                            'long': json_received['longitude']
+                        }
+                    }
+                    return json_vip, 200
+                except (TypeError, json.decoder.JSONDecodeError):
+                    app.logger.error(f'Error when processing json: malformed. Returned from db: {resp.text}')
+                    return 'ERROR', 501
+                except MissingJsonFields:
+                    app.logger.error(f'Error when processing json: missing fileds. Returned from db: {rep.text}')
+                    return 'ERROR', 501
             else:
                 app.logger.error(f'Error in db when querying {coord}!')
-                return 'ERROR'
+                return 'ERROR', 500
         except timeout_decorator.timeout_decorator.TimeoutError:
             app.logger.error(f'Timeout when querying {coord}!')
-            return 'TIMEOUT'
+            return 'TIMEOUT', 503
+        
 
     if app.config.get('HEARTBEAT'):
         t2 = threading.Thread(target=heartbeat_task, args=(app,))

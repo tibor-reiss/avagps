@@ -22,6 +22,7 @@ setuptools.setup(
         'flask',
         'gunicorn',
         'pytest-mock',
+        'pytest-cov',
         'python-dotenv',
         'requests',
         'timeout-decorator',

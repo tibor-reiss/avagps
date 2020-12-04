@@ -1,5 +1,6 @@
-homework_backend/
-**/__pycache__/
 *.egg-info/
+**/__pycache__/
+.coverage
 .vscode/
 avagps.log
+homework_backend/
